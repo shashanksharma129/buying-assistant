@@ -33,14 +33,44 @@ body {
     z-index: -1;
 }
 
-.chat-container {
+.app-layout {
     height: 100vh;
     display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.chat-container {
+    flex: 1;
+    display: flex;
     flex-direction: column;
+    gap: 1rem;
     max-width: 900px;
     margin: 0 auto;
-    padding: 1.5rem;
+    width: 100%;
+}
+
+/* Sidebar for Cards */
+.sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
     gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .app-layout {
+        flex-direction: column;
+        padding: 1rem;
+    }
+    
+    .sidebar {
+        width: 100%;
+        order: -1; /* Move sidebar to top on mobile */
+    }
 }
 
 header {
@@ -72,8 +102,31 @@ header p {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
+/* Sidebar Cards Section */
 .cards-section {
-    flex-shrink: 0;
+    position: sticky;
+    top: 1.5rem;
+}
+
+/* Cards Header */
+.cards-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.cards-header span:first-child {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+    .cards-section {
+        position: static;
+    }
 }
 
 .input-group {
@@ -109,10 +162,10 @@ small {
     font-size: 0.8rem;
 }
 
-/* Card Selector Styles */
+/* Card Selector Styles (Updated for Sidebar) */
 .card-selector-wrapper {
     position: relative;
-    z-index: 100000;
+    margin: 1rem 0;
 }
 
 .selected-cards {
@@ -159,6 +212,7 @@ small {
     color: #ef4444;
 }
 
+/* Simplified Dropdown for Sidebar */
 .card-dropdown {
     position: absolute;
     top: 100%;
@@ -169,9 +223,9 @@ small {
     backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
     border-radius: 0.75rem;
-    max-height: 300px;
+    max-height: 250px;
     overflow: hidden;
-    z-index: 99999;
+    z-index: 1000;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -184,12 +238,12 @@ small {
 }
 
 .card-list {
-    max-height: 250px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
 .card-list::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .card-list::-webkit-scrollbar-track {
@@ -198,7 +252,7 @@ small {
 
 .card-list::-webkit-scrollbar-thumb {
     background: rgba(99, 102, 241, 0.3);
-    border-radius: 4px;
+    border-radius: 3px;
 }
 
 .card-item {
@@ -227,23 +281,25 @@ small {
     color: #e2e8f0;
     font-weight: 500;
     margin-bottom: 0.25rem;
+    font-size: 0.9rem;
 }
 
 .card-meta {
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .card-check {
     color: var(--primary-color);
     font-weight: bold;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .no-results {
-    padding: 2rem;
+    padding: 1.5rem;
     text-align: center;
     color: var(--text-muted);
+    font-size: 0.875rem;
 }
 
 /* Messages container - scrollable */
@@ -481,7 +537,7 @@ button:disabled {
 /* Responsive */
 @media (max-width: 768px) {
     .chat-container {
-        padding: 1rem;
+        padding: 0;
     }
 
     header h1 {
@@ -494,5 +550,13 @@ button:disabled {
 
     button {
         padding: 0.875rem 1.5rem;
+    }
+
+    .welcome-message {
+        padding: 1.5rem;
+    }
+
+    .welcome-message ul {
+        max-width: 100%;
     }
 }
