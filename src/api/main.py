@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List
 from pathlib import Path
 from dotenv import load_dotenv
@@ -20,7 +20,35 @@ from google.genai.types import Content, Part
 
 load_dotenv()
 
-app = FastAPI(title="Buying Assistant API")
+app = FastAPI(
+    title="AI Buying Assistant API",
+    description="""
+    🤖 AI-powered buying assistant that helps users find the best products based on their preferences and highlights relevant offers for their credit/debit cards.
+
+    ## Features
+    - 💳 Card-specific offer recommendations
+    - 🛍️ AI-powered product research
+    - 💬 Persistent chat sessions
+    - ⚡ Real-time streaming responses
+
+    ## Authentication
+    This API uses Google Gemini AI. Set your API key in the GOOGLE_API_KEY environment variable.
+
+    ## Rate Limiting
+    The API is subject to Google Gemini API rate limits. Free tier has limited requests per minute.
+    """,
+    version="1.0.0",
+    contact={
+        "name": "Shashank Sharma",
+        "email": "shashanksharma129@gmail.com",
+    },
+    license_info={
+        "name": "MIT License",
+        "url": "https://opensource.org/licenses/MIT",
+    },
+    docs_url="/docs",
+    redoc_url="/redoc",
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,20 +59,71 @@ app.add_middleware(
 )
 
 class ChatRequest(BaseModel):
-    message: str
-    cards: Optional[List[str]] = None
-    session_id: Optional[str] = None  # For persistent chat
+    """
+    Request model for chat endpoint.
+    
+    Attributes:
+        message: The user's question or request for product recommendations
+        cards: Optional list of user's credit/debit cards for offer matching
+        session_id: Optional session ID for persistent chat conversations
+    """
+    message: str = Field(..., description="User's question or request for product recommendations")
+    cards: Optional[List[str]] = Field(None, description="Optional list of user's credit/debit cards for offer matching")
+    session_id: Optional[str] = Field(None, description="Optional session ID for persistent chat conversations")
 
 class ChatResponse(BaseModel):
-    response: str
-    session_id: str  # Return session_id for next message
+    """
+    Response model for chat endpoint.
+    
+    Attributes:
+        response: AI-generated response with product recommendations
+        session_id: Session ID for continuing the conversation
+    """
+    response: str = Field(..., description="AI-generated response with product recommendations and offers")
+    session_id: str = Field(..., description="Session ID for continuing the conversation")
 
-@app.get("/health")
+@app.get("/health", 
+         summary="Health Check", 
+         description="Simple health check endpoint to verify the API is running",
+         tags=["System"])
 async def health_check():
+    """
+    Health check endpoint to verify the API is running and responsive.
+    
+    Returns:
+        dict: Simple status response indicating the service is healthy
+    """
     return {"status": "ok"}
 
-@app.post("/api/chat", response_model=ChatResponse)
+@app.post("/api/chat", 
+         response_model=ChatResponse,
+         summary="Chat with AI Buying Assistant",
+         description="Send a message to the AI buying assistant to get product recommendations and offers",
+         tags=["Chat"])
 async def chat(request: ChatRequest):
+    """
+    Chat with the AI buying assistant to get product recommendations.
+    
+    This endpoint processes user queries and returns AI-generated product recommendations
+    along with relevant offers for their credit/debit cards.
+    
+    Args:
+        request: ChatRequest containing message, optional cards list, and session_id
+        
+    Returns:
+        ChatResponse with AI-generated recommendations and session_id for follow-up
+        
+    Raises:
+        HTTPException: If there's an error communicating with the AI agent
+        
+    Example:
+        ```json
+        {
+            "message": "Best laptop for coding under $1000",
+            "cards": ["HDFC Regalia", "Amex Platinum"]
+        }
+        ```
+    """
     context_str = ""
     if request.cards:
         context_str = f"\nUser Context (Cards): {', '.join(request.cards)}"
@@ -127,8 +206,17 @@ def extract_text_from_event(ev) -> str | None:
     return None
 
 # Serve index.html at root
-@app.get("/")
+@app.get("/", 
+         summary="Frontend Application", 
+         description="Serves the main web interface of the AI Buying Assistant",
+         tags=["Frontend"])
 async def read_root():
+    """
+    Serves the main web interface of the AI Buying Assistant.
+    
+    Returns:
+        FileResponse: The main HTML page for the web application
+    """
     static_files_dir = Path(__file__).parent.parent / "web"
     index_path = static_files_dir / "index.html"
     return FileResponse(index_path)

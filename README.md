@@ -32,7 +32,7 @@ Built with modern best practices:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/buying-assistant.git
+git clone https://github.com/shashanksharma129/buying-assistant.git
 cd buying-assistant
 ```
 
@@ -58,7 +58,9 @@ uv run uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
 
 ### 5. Access the Application
 
-Open your browser to: **http://localhost:8000**
+- **Frontend**: Open your browser to **http://localhost:8000**
+- **API Documentation**: Visit **http://localhost:8000/docs** for interactive Swagger UI
+- **ReDoc**: Alternative API docs at **http://localhost:8000/redoc**
 
 ## Usage
 
@@ -71,6 +73,46 @@ The agent will provide:
 - Approximate prices
 - Why each product fits your criteria
 - Available offers (highlighting your card-specific deals)
+
+## API Usage
+
+The application also provides a REST API for programmatic access:
+
+### Chat Endpoint
+
+```bash
+POST /api/chat
+```
+
+**Request Body:**
+```json
+{
+    "message": "Best laptop for coding under $1000",
+    "cards": ["HDFC Regalia", "Amex Platinum"],
+    "session_id": "optional-session-id"
+}
+```
+
+**Response:**
+```json
+{
+    "response": "AI-generated product recommendations...",
+    "session_id": "uuid-string-for-persistent-chat"
+}
+```
+
+### Example cURL Request
+
+```bash
+curl -X POST "http://localhost:8000/api/chat" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "message": "Best noise cancelling headphones under $300",
+       "cards": ["HDFC Bank Credit Card"]
+     }'
+```
+
+For interactive API documentation, visit **http://localhost:8000/docs**
 
 ## Project Structure
 
