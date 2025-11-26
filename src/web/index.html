@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Buying Assistant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-gradient"></div>
+
+    <div class="chat-container">
+        <header>
+            <h1>AI Buying Assistant</h1>
+            <p>Your intelligent partner for smart purchases.</p>
+        </header>
+
+        <!-- Cards selector - shown once at top -->
+        <div class="glass-card cards-section">
+            <div class="input-group">
+                <label for="cards-selector">Your Cards (Optional)</label>
+                <div class="card-selector-wrapper">
+                    <div class="selected-cards" id="selected-cards">
+                        <span class="placeholder">Click to select your cards...</span>
+                    </div>
+                    <div class="card-dropdown hidden" id="card-dropdown">
+                        <input type="text" class="card-search" id="card-search" placeholder="Search cards..."
+                            autocomplete="off">
+                        <div class="card-list" id="card-list"></div>
+                    </div>
+                </div>
+                <small>We'll highlight offers relevant to your cards.</small>
+            </div>
+        </div>
+
+        <!-- Chat messages area -->
+        <div id="messages-container" class="messages-container">
+            <div class="welcome-message">
+                <h3>👋 Welcome!</h3>
+                <p>Ask me anything about products you want to buy. I'll help you find the best options with relevant
+                    offers!</p>
+                <p><strong>Try asking:</strong></p>
+                <ul>
+                    <li>"Best laptop for coding under $1000"</li>
+                    <li>"Noise cancelling headphones for travel"</li>
+                    <li>"Gaming monitor with high refresh rate"</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fixed input at bottom -->
+        <div class="input-container glass-card">
+            <div class="input-wrapper">
+                <input type="text" id="product-input" placeholder="Ask me anything about products..."
+                    autocomplete="off">
+                <button id="search-btn">
+                    <span class="btn-text">Send</span>
+                    <div class="loader hidden"></div>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
