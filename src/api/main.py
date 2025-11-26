@@ -18,6 +18,7 @@ from google.genai.types import Content, Part
 
 from agent.agent import runner, session_service  # type: ignore[import-not-found]
 
+
 load_dotenv()
 
 app = FastAPI(
@@ -57,6 +58,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 
 
 class ChatRequest(BaseModel):
